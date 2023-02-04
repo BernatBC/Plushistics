@@ -12,6 +12,7 @@
         (= (capacity V2) 10)
         (= (cargo V1) 0)
         (= (cargo V2) 0)
+        (parked V1 C1)
         (path C1 C4)
         (path C1 C3)
         (path C1 C5)

@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <sys/wait.h>
 
 int h, fd;
@@ -14,12 +15,16 @@ int main(int argc, char** argv)
 {
     h = atoi(argv[1]);
 
-    while (true){
+    while (1){
 
         fd = fork();
         if (fd == 0){
             char str[2];
             sprintf(str, "%d", h);
+            
+            int out = open("pddl.out", O_RDWR|O_CREAT|O_TRUNC, 0666);
+            close(1);
+            dup(out);
             execlp("./ff", "./ff", "-O",  "-o", "domain.pddl", "-f", "problem.pddl", "-h", str, (char * ) NULL);
         } else {
             struct sigaction sa;
