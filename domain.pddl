@@ -32,7 +32,7 @@
         )
 
         :precondition (and 
-            (esta-en ?v ?from)
+            (parked ?v ?from)
             (path ?from ?to)
         )
         :effect (and
