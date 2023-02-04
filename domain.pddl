@@ -1,4 +1,4 @@
-(define (domain expert-logistic)
+(define (domain plushistics)
 
     (:requirements :adl :fluents :equality)
 
