@@ -37,8 +37,9 @@
         )
         :effect (and
             (parked ?v ?to)
-            (not (parked ?v ?from))
             (increase (gas) (cost ?from ?to))
+            (not (parked ?v ?from))
+            
         )
     )
 
