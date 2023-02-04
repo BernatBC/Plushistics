@@ -73,7 +73,7 @@ namespace WriteTextFile
 
             addVan(toLocation("Egham", 1, 0), 3);
 
-            Location[] locationsArray = locations.toArray(new String[locations.size()]);
+            Location[] locationsArray = new String[locations.Count];
             //addPath(locationsArray[0], locationsArray[1]);
 
             string text = "(define (problem one)\n" +
