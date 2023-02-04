@@ -55,13 +55,26 @@ namespace WriteTextFile
             vans.Add(van);
         }
 
+        static void addPath(Location first, Location second, int gasNeeded)
+        {
+            Path path;
+            path.one = first;
+            path.two = second;
+            path.fuel = gasNeeded;
+            paths.Add(path);
+        }
+
         static void Main(string[] args)
         {            
             addLocation("Egham", 1, 0);
             addLocation("London", 1, 0);
-            addLocation("Oxford", 1, 4);
+            addLocation("Cambridge", 1, 4);
+            addLocation("Slough", 2, 1);
 
             addVan(toLocation("Egham", 1, 0), 3);
+
+            Location[] locationsArray = locations.toArray(new String[locations.size()]);
+            //addPath(locationsArray[0], locationsArray[1]);
 
             string text = "(define (problem one)\n" +
                             "\t(:domain plushistics)\n\n" + 
@@ -84,9 +97,6 @@ namespace WriteTextFile
                 text += "\t\t(= (cargo V" + i + ") 0)\n";
                 text += "\t\t(parked V" + i + " C1)\n";
             }
-
-
-
 
 
 
