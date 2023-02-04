@@ -72,6 +72,24 @@ namespace WriteTextFile
             foreach (Location loc in locations) {text += loc.name + " ";}
             text += "- city\n";
 
+            text += "\t\t";
+            for (int i = 1; i <= vans.Count; ++i) {text +=  "V" + i + " ";}
+            text += "- van\n\n\t)\n";
+
+            text += "\t(:init\n" + 
+                    "\t\t(= (gas) 0)\n";
+
+            for (int i = 1; i <= vans.Count; ++i) {
+                text += "\t\t(= (capacity V" + i + ") 10)\n";
+                text += "\t\t(= (cargo V" + i + ") 0)\n";
+                text += "\t\t(parked V" + i + " C1)\n";
+            }
+
+
+
+
+
+
             // Write the string to a file
             File.WriteAllText("./example.txt", text);
 

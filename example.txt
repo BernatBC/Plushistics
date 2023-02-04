@@ -1,0 +1,12 @@
+(define (problem one)
+	(:domain plushistics)
+
+	(:objects
+		Egham London Oxford - city
+		V1 - van
+
+	)
+	(:init
+		(= (gas) 0)
+		(= (capacity V1) 10)
+		(= (cargo V1) 0)
