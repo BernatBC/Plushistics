@@ -1,11 +1,22 @@
 // THIS IS A C SHARP FUNCTION
 
-Queue<Action> parse_pddl ()
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+namespace WriteTextFile
 {
-	string text = System.IO.File.ReadAllText(@"./pddl.out");
-	string[] t = text.Split("[0-9]*:");
-	Console.WriteLine(t[1]);
-	Console.WriteLine(t[2]);
-	Console.WriteLine(t[3]);
-		 
-}
+    class Program
+    {
+    static void Main(string[] args)
+        {  
+        string text = System.IO.File.ReadAllText(@"./pddl.out");
+	string[] t = text.Split("step");
+	
+	string[] t2 = t[1].Split("time");
+	Console.WriteLine(t2[0]);
+
+        }
+        }
+        }
+
