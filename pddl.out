@@ -11,7 +11,7 @@ metric established (normalized to minimize): ((1.00*[RF12](GAS)) - () + 0.00)
 
 checking for cyclic := effects --- OK.
 
-ff: search configuration is  best-first on 1*g(s) + 2*h(s) where
+ff: search configuration is  best-first on 1*g(s) + 4*h(s) where
     metric is ((1.00*[RF12](GAS)) - () + 0.00)
 
 advancing to distance:   21
@@ -51,55 +51,62 @@ step    0: LOAD V1 C1
         9: LOAD V1 C4
        10: LOAD V1 C4
        11: LOAD V1 C4
-       12: MOVE V1 C4 C1
-       13: UNLOAD V1 C1
-       14: UNLOAD V1 C1
-       15: UNLOAD V1 C1
-       16: UNLOAD V1 C1
-       17: UNLOAD V1 C1
-       18: UNLOAD V1 C1
-       19: UNLOAD V1 C1
-       20: MOVE V1 C1 C3
-       21: LOAD V1 C3
-       22: LOAD V1 C3
-       23: LOAD V1 C3
-       24: LOAD V1 C3
+       12: MOVE V1 C4 C8
+       13: UNLOAD V1 C8
+       14: UNLOAD V1 C8
+       15: UNLOAD V1 C8
+       16: UNLOAD V1 C8
+       17: UNLOAD V1 C8
+       18: MOVE V1 C8 C4
+       19: MOVE V1 C4 C3
+       20: UNLOAD V1 C3
+       21: UNLOAD V1 C3
+       22: MOVE V1 C3 C6
+       23: UNLOAD V1 C6
+       24: MOVE V1 C6 C3
        25: LOAD V1 C3
        26: LOAD V1 C3
-       27: MOVE V1 C3 C6
-       28: UNLOAD V1 C6
-       29: MOVE V1 C6 C7
-       30: LOAD V1 C7
-       31: LOAD V1 C7
-       32: LOAD V1 C7
-       33: MOVE V1 C7 C4
-       34: UNLOAD V1 C4
-       35: UNLOAD V1 C4
-       36: UNLOAD V1 C4
-       37: UNLOAD V1 C4
-       38: MOVE V1 C4 C8
-       39: UNLOAD V1 C8
-       40: UNLOAD V1 C8
-       41: UNLOAD V1 C8
-       42: UNLOAD V1 C8
-       43: UNLOAD V1 C8
-       44: MOVE V1 C8 C4
-       45: MOVE V1 C4 C9
-       46: LOAD V1 C9
-       47: LOAD V1 C9
-       48: LOAD V1 C9
-       49: LOAD V1 C9
-       50: LOAD V1 C9
-       51: LOAD V1 C9
-       52: MOVE V1 C9 C4
-       53: UNLOAD V1 C4
-       54: UNLOAD V1 C4
-       55: MOVE V1 C4 C9
-       56: UNLOAD V1 C9
-       57: UNLOAD V1 C9
-       58: MOVE V1 C9 C10
-       59: UNLOAD V1 C10
-       60: UNLOAD V1 C10
+       27: LOAD V1 C3
+       28: LOAD V1 C3
+       29: LOAD V1 C3
+       30: LOAD V1 C3
+       31: LOAD V1 C3
+       32: MOVE V1 C3 C1
+       33: UNLOAD V1 C1
+       34: UNLOAD V1 C1
+       35: UNLOAD V1 C1
+       36: UNLOAD V1 C1
+       37: UNLOAD V1 C1
+       38: UNLOAD V1 C1
+       39: UNLOAD V1 C1
+       40: MOVE V1 C1 C3
+       41: LOAD V1 C3
+       42: MOVE V1 C3 C4
+       43: UNLOAD V1 C4
+       44: MOVE V1 C4 C7
+       45: LOAD V1 C7
+       46: LOAD V1 C7
+       47: LOAD V1 C7
+       48: MOVE V1 C7 C4
+       49: UNLOAD V1 C4
+       50: UNLOAD V1 C4
+       51: UNLOAD V1 C4
+       52: MOVE V1 C4 C9
+       53: LOAD V1 C9
+       54: LOAD V1 C9
+       55: LOAD V1 C9
+       56: LOAD V1 C9
+       57: LOAD V1 C9
+       58: LOAD V1 C9
+       59: MOVE V1 C9 C4
+       60: UNLOAD V1 C4
+       61: UNLOAD V1 C4
+       62: MOVE V1 C4 C9
+       63: UNLOAD V1 C9
+       64: UNLOAD V1 C9
+       65: MOVE V1 C9 C10
+       66: UNLOAD V1 C10
+       67: UNLOAD V1 C10
      
 
 time spent:    0.00 seconds instantiating 86 easy, 0 hard action templates
@@ -107,6 +114,6 @@ time spent:    0.00 seconds instantiating 86 easy, 0 hard action templates
                0.00 seconds creating final representation with 10 relevant facts, 14 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.96 seconds searching, evaluating 34120 states, to a max depth of 0
-               0.96 seconds total time
+               1.26 seconds searching, evaluating 38581 states, to a max depth of 0
+               1.26 seconds total time
 
