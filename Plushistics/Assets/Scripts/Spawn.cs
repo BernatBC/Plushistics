@@ -86,6 +86,7 @@ public class Spawn : MonoBehaviour
     Queue<Action> actions;
 
     bool moving = false;
+    bool vanMovement = false;
     bool playSim = false;
 
     // Start is called before the first frame update
@@ -111,10 +112,15 @@ public class Spawn : MonoBehaviour
             else if (pathSelected) drawLine();
             else if (vanSelected) selectVanLocation();
         }
-        if (playSim && moving)
+        if (playSim && moving && !vanMovement) return;
+        if (playSim && moving && vanMovement)
         {
             if (Vector3.Distance(movingVan.instance.transform.position, destination.pos) > 0.001f) movingVan.instance.transform.position = Vector3.MoveTowards(movingVan.instance.transform.position, destination.instance.transform.position, Time.deltaTime);
-            else moving = false;
+            else
+            {
+                moving = false;
+                vanMovement = false;
+            }
         }
         else if (playSim && !moving) NextAction();
     }
@@ -317,47 +323,64 @@ public class Spawn : MonoBehaviour
     }
 
     private void NextAction() {
-        if (actions.Count <= 0) return;
+        if (actions.Count <= 0 || moving) return;
         Action action = actions.First();
         actions.Dequeue();
-        foreach (Action a in actions) UnityEngine.Debug.Log($"Action:{a} Action.action:{a.action} Action.city1:{a.city1} Action.city2:{a.city2} Action.van:{a.van}");
-        if (action.action == "LOAD") StartCoroutine(LoadShark(action.van, action.city1));
-        else if (action.action == "UNLOAD") StartCoroutine(UnloadShark(action.van, action.city1));
-        else MoveVan(action.van, action.city1, action.city2);
+        if (action.action == "LOAD") StartCoroutine(LoadShark(action.van.id, action.city1.id));
+        else if (action.action == "UNLOAD") StartCoroutine(UnloadShark(action.van.id, action.city1.id));
+        else StartCoroutine(MoveVan(action.van.id, action.city1.id, action.city2.id));
     }
 
-    IEnumerator LoadShark(Van van, Location location) {
+    IEnumerator LoadShark(string vanID, string locationID) {
+        Van van = vans[vanID];
+        Location location = locations[locationID];
+        UnityEngine.Debug.Log("LOAD!");
         moving = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
         van.currentLoad++;
         location.sharksAvailable--;
-        van.instance.GetComponent<TMP_Text>().text = $"{van.currentLoad}/{van.maxLoad}";
-        location.instance.transform.Find("Sharks").GetComponent<TMP_Text>().text = $"{created.sharksAvailable}/{created.sharksNeeded}";
+        van.instance.GetComponentInChildren<TMP_Text>().text = $"{van.currentLoad}/{van.maxLoad}";
+        location.instance.transform.Find("Sharks").GetComponent<TMP_Text>().text = $"{location.sharksAvailable}/{location.sharksNeeded}";
+        vans.Remove(van.id);
+        vans.Add(van.id, van);
+        locations.Remove(location.id);
+        locations.Add(location.id, location);
         moving = false;
         Instantiate(sharkAnimation, new Vector3(location.pos.x, location.pos.y, 0), Quaternion.identity);
     }
 
-    IEnumerator UnloadShark(Van van, Location location) {
+    IEnumerator UnloadShark(string vanID, string locationID) {
+        Van van = vans[vanID];
+        Location location = locations[locationID];
+        UnityEngine.Debug.Log("UNLOAD!");
         moving = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
         van.currentLoad--;
         location.sharksAvailable++;
-        van.instance.GetComponent<TMP_Text>().text = $"{van.currentLoad}/{van.maxLoad}";
-        location.instance.transform.Find("Sharks").GetComponent<TMP_Text>().text = $"{created.sharksAvailable}/{created.sharksNeeded}";
+        van.instance.GetComponentInChildren<TMP_Text>().text = $"{van.currentLoad}/{van.maxLoad}";
+        location.instance.transform.Find("Sharks").GetComponent<TMP_Text>().text = $"{location.sharksAvailable}/{location.sharksNeeded}";
+        vans.Remove(van.id);
+        vans.Add(van.id, van);
+        locations.Remove(location.id);
+        locations.Add(location.id, location);
         moving = false;
         Instantiate(sharkAnimation, new Vector3(location.pos.x, location.pos.y, 0), Quaternion.identity);
     }
 
-    void MoveVan(Van van, Location city1, Location city2) {
-        var step = 1 * Time.deltaTime;
+    IEnumerator MoveVan(string vanID, string city1ID, string city2ID) {
+        Van van = vans[vanID];
+        Location city2 = locations[city2ID];
+        UnityEngine.Debug.Log("MOVE!");
+        moving = true;
+        yield return new WaitForSeconds(0.7f);
         destination = city2;
         movingVan = van;
+        vanMovement = true;
     }
 
     void ReadFile()
     {
         string text = System.IO.File.ReadAllText(@"./output.txt");
-        UnityEngine.Debug.Log(text);
         string[] t = text.Split("step");
 
         string[] t2 = t[1].Split("time");
@@ -384,21 +407,18 @@ public class Spawn : MonoBehaviour
                     {
                         state = 2;
                         act.action = "LOAD";
-                        UnityEngine.Debug.Log("LOAD");
                         break;
                     }
                     else if (state == 1 && p[j][x] == 'M')
                     {
                         state = 2;
                         act.action = "MOVE";
-                        UnityEngine.Debug.Log("MOVE");
                         break;
                     }
                     else if (state == 1 && p[j][x] == 'U')
                     {
                         state = 2;
                         act.action = "UNLOAD";
-                        UnityEngine.Debug.Log("UNLOAD");
                         break;
                     }
                     else if (state == 2 && p[j][x] == 'V') continue;
@@ -433,13 +453,8 @@ public class Spawn : MonoBehaviour
     }
 
     void RunCMD() {
-        //yield return new WaitForSecondsRealtime(2f);
-        /*startInfo.FileName = "metricff.exe";
-        startInfo.Arguments = "/C -O -o domain.pddl -f problem.pddl -h 5 > output.txt";*/
-        string strCmdText;
-        strCmdText = "/C metricff.exe -O -o domain.pddl -f problem.pddl -h 5 > output.txt";
+        string strCmdText = "/C metricff.exe -O -o domain.pddl -f problem.pddl -h 4 > output.txt";
         System.Diagnostics.Process.Start("CMD.exe", strCmdText).WaitForExit();
-
     }
 
     void CreateFile() {
@@ -460,7 +475,7 @@ public class Spawn : MonoBehaviour
 
         for (int i = 1; i <= vans.Count; ++i)
         {
-            text += "\t\t(= (capacity V" + i + ") 10)\n";
+            text += "\t\t(= (capacity V" + i + ") " + vans["V" + i.ToString()].maxLoad + ")\n";
             text += "\t\t(= (cargo V" + i + ") 0)\n";
             text += "\t\t(parked V" + i + " " + vans["V"+i.ToString()].start.id + ")\n";
         }
