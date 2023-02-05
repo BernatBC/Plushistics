@@ -372,6 +372,16 @@ public class Spawn : MonoBehaviour
         Location city2 = locations[city2ID];
         UnityEngine.Debug.Log("MOVE!");
         moving = true;
+        if (van.instance.transform.position.x > city2.instance.transform.position.x)
+        {
+            van.instance.GetComponentInChildren<SpriteRenderer>().flipX = true;
+            //if (van.instance.transform.Find("Text (TMP)").transform.position.x < 0) van.instance.transform.Find("Text (TMP)").transform.position = new Vector3(-van.instance.transform.Find("Text (TMP)").transform.position.x, van.instance.transform.Find("Text (TMP)").transform.position.y, van.instance.transform.Find("Text (TMP)").transform.position.z);
+        }
+        else
+        {
+            van.instance.GetComponentInChildren<SpriteRenderer>().flipX = false;
+            //if (van.instance.transform.Find("Text (TMP)").transform.position.x > 0) van.instance.transform.Find("Text (TMP)").transform.position = new Vector3(-van.instance.transform.Find("Text (TMP)").transform.position.x, van.instance.transform.Find("Text (TMP)").transform.position.y, van.instance.transform.Find("Text (TMP)").transform.position.z);
+        }
         yield return new WaitForSeconds(0.7f);
         destination = city2;
         movingVan = van;
@@ -453,8 +463,21 @@ public class Spawn : MonoBehaviour
     }
 
     void RunCMD() {
-        string strCmdText = "/C metricff.exe -O -o domain.pddl -f problem.pddl -h 4 > output.txt";
-        System.Diagnostics.Process.Start("CMD.exe", strCmdText).WaitForExit();
+        /*string strCmdText = "/C metricff.exe -O -o domain.pddl -f problem.pddl -h 4 > output.txt";
+        System.Diagnostics.Process.Start("CMD.exe", strCmdText).WaitForExit();*/
+
+        int h = 1;
+        bool finished = false;
+
+        while (!finished)
+        {
+            //executa amb h
+            //mutacio
+            string strCmdText = "/C metricff.exe -O -o domain.pddl -f problem.pddl -h " + h + " > output.txt";
+            //System.Diagnostics.Process.Start(strCmdText, "").WaitForExit();
+            finished = System.Diagnostics.Process.Start("CMD.exe", strCmdText).WaitForExit(6000);
+            ++h;
+        }
     }
 
     void CreateFile() {
