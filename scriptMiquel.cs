@@ -73,13 +73,17 @@ namespace WriteTextFile
 
             addVan(toLocation("Egham", 1, 0), 3);
 
-            Location[] locationsArray = new String[locations.Count];
-            //addPath(locationsArray[0], locationsArray[1]);
+            Location[] locationsArray = new Location[locations.Count];
+            locations.CopyTo(locationsArray);
+
+            addPath(locationsArray[0], locationsArray[1], 1);
+            addPath(locationsArray[1], locationsArray[2], 1);
+            addPath(locationsArray[2], locationsArray[0], 1);
+            addPath(locationsArray[3], locationsArray[0], 1);
 
             string text = "(define (problem one)\n" +
                             "\t(:domain plushistics)\n\n" + 
                             "\t(:objects\n" ;
-
             
             text += "\t\t";
             foreach (Location loc in locations) {text += loc.name + " ";}
@@ -98,10 +102,25 @@ namespace WriteTextFile
                 text += "\t\t(parked V" + i + " C1)\n";
             }
 
+            foreach (Path p in paths) {
+                text += "\t\t(path "+ p.one.name + " " + p.two.name +")\n";
+                text += "\t\t(path "+ p.two.name + " " + p.one.name +")\n";
+                text += "\t\t(= (cost "+ p.one.name + " " + p.two.name +") " + p.fuel +")\n";
+                text += "\t\t(= (cost "+ p.two.name + " " + p.one.name +") " + p.fuel +")\n";
+            }
 
+            foreach (Location loc in locations) {
+                text += "\t\t(= (sharks " + loc.name + ") " + loc.sharksAvailable + ")\n";
+                text += "\t\t(= (sharks " + loc.name + ") " + loc.sharksNeeded + ")\n";
+            }
+            text += "\t)\n\n";
+
+            text += "\t(:goal\n\t\t(forall (?c - city)\n";
+            text += "\t\t\t(>= (sharks ?c) (demand ?c))\n\t)\n\n";
+            text += "\t(:metric minimize\n\t\t\t(gas)\n\t)\n)";
 
             // Write the string to a file
-            File.WriteAllText("./example.txt", text);
+            File.WriteAllText("./gen_problem.pddl", text);
 
             Console.WriteLine("Text written to file successfully.");
         }
